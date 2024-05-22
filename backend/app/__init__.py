@@ -1,27 +1,23 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import os
+from flask_bcrypt import Bcrypt
+from .config import Config
 
 db = SQLAlchemy()
 migrate = Migrate()
+bcrypt = Bcrypt()
 
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(Config)
 
-    # Configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL',
-                                                      'postgresql://archery_user:new_password@localhost/archery_club')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
+    bcrypt.init_app(app)
 
-    with app.app_context():
-        # Import models
-        from .models import user, role, event, event_type, result, olympic_end, bow, arrow, equipment_set, message
-        db.create_all()
+    from .routes import init_routes
+    init_routes(app)
 
     return app

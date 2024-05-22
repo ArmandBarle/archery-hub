@@ -1,4 +1,4 @@
-from .. import db
+from .. import db, bcrypt
 
 
 class User(db.Model):
@@ -13,3 +13,8 @@ class User(db.Model):
     user_created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     user_updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
 
+    def set_password(self, password):
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
