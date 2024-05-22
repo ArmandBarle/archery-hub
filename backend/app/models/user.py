@@ -18,3 +18,13 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
+
+    def to_dict(self):
+        return {
+            'user_id': self.user_id,
+            'email': self.email,
+            'role_id': self.role_id,
+            'phone_number': self.phone_number,
+            'first_name': self.first_name,
+            'last_name': self.last_name
+        }
