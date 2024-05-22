@@ -22,7 +22,7 @@ def register():
         last_name=last_name,
         email=email,
         phone_number=phone_number,
-        role_id=1  # Assuming a default role_id, adjust as necessary
+        role_id=2  # Assuming a default role_id, adjust as necessary
     )
     new_user.set_password(password)
 
