@@ -1,7 +1,7 @@
 from app.models.arrow import Arrow
 from app import db
 
-class ArrowsService:
+class ArrowService:
     @staticmethod
     def create_arrow(data):
         new_arrow = Arrow(
@@ -35,3 +35,20 @@ class ArrowsService:
             db.session.commit()
             return True
         return False
+
+    @staticmethod
+    def update_arrow(arrow_id, data):
+        arrow = Arrow.query.get(arrow_id)
+        if arrow:
+            arrow.user_id = data.get('user_id', arrow.user_id)
+            arrow.arrow_material = data.get('arrow_material', arrow.arrow_material)
+            arrow.arrow_length = data.get('arrow_length', arrow.arrow_length)
+            arrow.arrow_spine = data.get('arrow_spine', arrow.arrow_spine)
+            arrow.arrow_diameter = data.get('arrow_diameter', arrow.arrow_diameter)
+            arrow.arrow_tip = data.get('arrow_tip', arrow.arrow_tip)
+            arrow.knock_colour = data.get('knock_colour', arrow.knock_colour)
+            arrow.fletching_type = data.get('fletching_type', arrow.fletching_type)
+            arrow.fletching_colour = data.get('fletching_colour', arrow.fletching_colour)
+            db.session.commit()
+            return arrow
+        return None
