@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/services/auth_service.dart';
+import 'package:frontend/data/models/user_registration_model.dart';
+import 'package:frontend/presentation/screens/home/home_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
@@ -6,12 +9,16 @@ class RegisterScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  
+  final AuthService _authService = AuthService();
+
+  RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: const Text('Register'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -20,31 +27,55 @@ class RegisterScreen extends StatelessWidget {
             children: <Widget>[
               TextField(
                 controller: firstNameController,
-                decoration: InputDecoration(labelText: 'First Name'),
+                decoration: const InputDecoration(labelText: 'First Name'),
               ),
               TextField(
                 controller: lastNameController,
-                decoration: InputDecoration(labelText: 'Last Name'),
+                decoration: const InputDecoration(labelText: 'Last Name'),
               ),
               TextField(
                 controller: emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
               ),
               TextField(
                 controller: phoneController,
-                decoration: InputDecoration(labelText: 'Phone Number'),
+                decoration: const InputDecoration(labelText: 'Phone Number'),
               ),
               TextField(
                 controller: passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 obscureText: true,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+              
               ElevatedButton(
-                onPressed: () {
-                  // Implement registration logic here
+                onPressed: () async {
+                  User user = User(
+                    firstName: firstNameController.text,
+                    lastName: lastNameController.text,
+                    email: emailController.text,
+                    phoneNumber: phoneController.text,
+                    password: passwordController.text,
+                  );  
+
+                  bool success = await _authService.register(user);
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('User registered successfully')),
+                    );
+                    // Navigate to home screen
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Failed to register user')),
+                    );
+                  }
+
                 },
-                child: Text('Register'),
+                child: const Text('Register'),
               ),
             ],
           ),

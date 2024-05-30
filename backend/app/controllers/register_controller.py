@@ -17,7 +17,7 @@ class RegisterController:
         if existing_user:
             return jsonify({'message': 'User already exists'}), 400
 
-        new_user = user_service.create_user(
+        user_service.create_user(
             first_name=first_name,
             last_name=last_name,
             email=email,
