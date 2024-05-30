@@ -24,6 +24,36 @@ class ApiService {
     return response;
   }
 
+  Future<http.Response> deleteRequest(String endpoint) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final response = await http.delete(url);
+    _checkResponse(response);
+    return response;
+  }
+
+  Future<http.Response> patchRequest(String endpoint, Map<String, dynamic> data) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final response = await http.patch(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    _checkResponse(response);
+    return response;
+  }
+
+  Future<http.Response> putRequest(String endpoint, Map<String, dynamic> data) async {
+    final url = Uri.parse('$baseUrl$endpoint');
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    _checkResponse(response);
+    return response;
+  }
+  
+
   void _checkResponse(http.Response response) {
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw Exception('Failed to communicate with server: ${response.statusCode}');

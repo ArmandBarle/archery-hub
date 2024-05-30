@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:frontend/presentation/screens/home/home_screen.dart';
 import 'package:frontend/core/services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-
     return Scaffold(
       appBar: AppBar(title: const Text('Login')),
       body: Padding(
@@ -31,8 +30,21 @@ class LoginScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 try {
-                  await authService.login(emailController.text, passwordController.text);
-                  // Navigate to home screen or handle successful login
+                  bool success = await _authService.login(emailController.text, passwordController.text);
+
+                  if (success) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('User logged in successfully')),
+                    );
+                    // Navigate to home screen
+                    Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Failed to log in user')),
+                    );
+                  }                  
                 } catch (e) {
                   // Handle login error
                 }

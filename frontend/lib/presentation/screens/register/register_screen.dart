@@ -73,7 +73,6 @@ class RegisterScreen extends StatelessWidget {
                       const SnackBar(content: Text('Failed to register user')),
                     );
                   }
-
                 },
                 child: const Text('Register'),
               ),

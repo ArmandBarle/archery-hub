@@ -1,5 +1,4 @@
 import 'package:frontend/data/models/user_registration_model.dart';
-import 'api_service.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:frontend/core/constants/constants.dart';
@@ -8,16 +7,19 @@ class AuthService {
   // final ApiService apiService;
   static const String baseUrl = AppConstants.baseUrl;
 
+  Future<bool> login(String email, String password) async {
+    const url = '${AppConstants.baseUrl}/login';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'email': email, 'password': password}),
+    );
 
-  AuthService();
-
-  Future<void> login(String email, String password) async {
-    // final response = await apiService.postRequest('/login', {
-    //   'email': email,
-    //   'password': password,
-    // });
-    // // Handle login response
-    // e.g., store token, handle errors, etc.
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   Future<bool> register(User user) async {
