@@ -6,12 +6,13 @@ class UserController:
     @staticmethod
     def get_users():
         users = UserService.get_all_users()
-        return jsonify(users)
+        users_dict = [user.to_dict() for user in users]
+        return jsonify(users_dict)
 
     @staticmethod
     def get_user_by_id(user_id):
         user = UserService.get_user_by_id(user_id)
-        return jsonify(user)
+        return jsonify(user.to_dict())
 
     @staticmethod
     def update_user(user_id):
@@ -30,3 +31,8 @@ class UserController:
     def get_user_roles():
         roles = UserService.get_user_roles()
         return jsonify(roles)
+
+    @staticmethod
+    def get_user_by_email(email):
+        user = UserService.get_user_by_email(email)
+        return jsonify(user.to_dict())

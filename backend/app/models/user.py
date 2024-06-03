@@ -1,4 +1,7 @@
+import jwt
 from .. import db, bcrypt
+import datetime
+from app.config import Config
 
 
 class User(db.Model):
@@ -28,3 +31,33 @@ class User(db.Model):
             'first_name': self.first_name,
             'last_name': self.last_name
         }
+
+    def set_auth_token(self):
+        try:
+            payload = {
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=50),
+                'iat': datetime.datetime.utcnow(),
+                'sub': self.user_id
+            }
+            return jwt.encode(
+                payload,
+                Config.SECRET_KEY,
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
+
+    @staticmethod
+    def decode_auth_token(auth_token):
+        """
+        Decodes the auth token
+        :param auth_token:
+        :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, Config.SECRET_KEY)
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return 'Signature expired. Please log in again.'
+        except jwt.InvalidTokenError:
+            return 'Invalid token. Please log in again.'

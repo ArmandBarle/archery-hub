@@ -1,5 +1,6 @@
 from flask import request, jsonify
 from app.services.user_service import UserService
+import jwt
 
 class LoginController:
     @staticmethod
@@ -8,10 +9,18 @@ class LoginController:
         email = data.get('email')
         password = data.get('password')
 
-        user_service = UserService()
-        user = user_service.authenticate_user(email, password)
+        user = UserService().authenticate_user(email, password)
 
         if user:
-            # Here you would normally generate a token and return it
-            return jsonify({'message': 'Logged in successfully'}), 200
+            auth_token = user.set_auth_token()
+            if auth_token:
+                response = {
+                    'auth_token': auth_token,
+                    'message': 'Login successful',
+                    'status': 'success'
+                }
+                return jsonify(response), 200
+            else:
+                return jsonify({'message': 'Login failed'}), 401
+
         return jsonify({'message': 'Invalid credentials'}), 401
