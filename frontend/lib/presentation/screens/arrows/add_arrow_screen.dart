@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/services/auth_service.dart';
-import 'package:frontend/data/models/user_registration_model.dart';
-import 'package:frontend/presentation/screens/home/home_screen.dart';
+import 'package:frontend/data/models/arrow_model.dart';
 
-class RegisterScreen extends StatelessWidget {
+class AddArrowScreen extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -12,7 +11,7 @@ class RegisterScreen extends StatelessWidget {
   
   final AuthService _authService = AuthService();
 
-  RegisterScreen({super.key});
+  AddArrowScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

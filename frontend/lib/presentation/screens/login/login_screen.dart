@@ -1,13 +1,46 @@
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:frontend/presentation/screens/home/home_screen.dart';
+import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:frontend/core/services/auth_service.dart';
+import 'package:frontend/data/models/user_info_model.dart';
+import 'package:frontend/data/repositories/secure_storage.dart';
+import 'package:frontend/presentation/screens/users/user_detail_screen.dart';
+import 'package:frontend/core/constants/constants.dart';
+import 'package:logger/logger.dart';
 
-class LoginScreen extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
 
-  LoginScreen({super.key});
+  void _login() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    try {
+      var response = await _authService.login(email, password);
+      if (response.statusCode == 200){
+
+        // Get the payload
+      var payload = await FlutterSessionJwt.getPayload();
+      // Extract the userId
+      final userId = payload['sub'];
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserDetailScreen(user_id: userId)),
+          );        
+      }
+    } catch (e) {
+      // Handle login error
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Login failed: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,40 +50,10 @@ class LoginScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
+            TextField(controller: _emailController, decoration: const InputDecoration(labelText: 'Email')),
+            TextField(controller: _passwordController, decoration: const InputDecoration(labelText: 'Password'), obscureText: true),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                try {
-                  bool success = await _authService.login(emailController.text, passwordController.text);
-
-                  if (success) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('User logged in successfully')),
-                    );
-                    // Navigate to home screen
-                    Navigator.pushReplacement(
-                      context, MaterialPageRoute(builder: (context) => const HomeScreen()),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Failed to log in user')),
-                    );
-                  }                  
-                } catch (e) {
-                  // Handle login error
-                }
-              },
-              child: const Text('Login'),
-            ),
+            ElevatedButton(onPressed: _login, child: const Text('Login')),
           ],
         ),
       ),

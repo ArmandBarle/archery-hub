@@ -1,12 +1,12 @@
 
-class User {
+class UserRegistration {
   final String email;
   final String phoneNumber;
   final String firstName;
   final String lastName;
   final String password;
 
-  User({
+  UserRegistration({
     required this.email,
     required this.phoneNumber,
     required this.firstName,
@@ -14,8 +14,8 @@ class User {
     required this.password
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
+  factory UserRegistration.fromJson(Map<String, dynamic> json) {
+    return UserRegistration(
       email: json['email'],
       phoneNumber: json['phone_number'],
       firstName: json['first_name'],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/services/auth_service.dart';
 import 'package:frontend/data/models/user_registration_model.dart';
-import 'package:frontend/presentation/screens/home/home_screen.dart';
+import 'package:frontend/presentation/screens/login/login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
@@ -50,7 +50,7 @@ class RegisterScreen extends StatelessWidget {
               
               ElevatedButton(
                 onPressed: () async {
-                  User user = User(
+                  UserRegistration user = UserRegistration(
                     firstName: firstNameController.text,
                     lastName: lastNameController.text,
                     email: emailController.text,
@@ -63,10 +63,10 @@ class RegisterScreen extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('User registered successfully')),
                     );
-                    // Navigate to home screen
+                    // Navigate to login screen
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
