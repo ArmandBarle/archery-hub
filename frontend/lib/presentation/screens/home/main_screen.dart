@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:frontend/data/repositories/secure_storage.dart';
+import 'package:frontend/presentation/screens/calendar/calendar_screen.dart';
 import 'package:frontend/presentation/screens/chat_screen.dart';
 import 'package:frontend/presentation/screens/home/home_screen.dart';
 import 'package:frontend/presentation/screens/users/user_detail_screen.dart';
@@ -66,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
             UserDetailScreen(user_id: userId),
             ChatScreen(),
             Text('Screen 3'),
-            Text('Screen 4'),
+            CalendarScreen(),
           ];
 
           return _widgetOptions.elementAt(_selectedIndex);

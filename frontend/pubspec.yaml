@@ -40,6 +40,7 @@ dependencies:
   logger: ^2.3.0
   flutter_session_jwt: ^0.0.6
   flutter_secure_storage: ^9.2.2
+  table_calendar: ^3.1.2
 
 dev_dependencies:
   flutter_test:
