@@ -1,5 +1,5 @@
 from flask import request, jsonify
-from app.services.user_service import UserService
+from app.services.authentication_service import AuthenticationService
 import jwt
 
 class LoginController:
@@ -9,7 +9,7 @@ class LoginController:
         email = data.get('email')
         password = data.get('password')
 
-        user = UserService().authenticate_user(email, password)
+        user = AuthenticationService().authenticate_user(email, password)
 
         if user:
             auth_token = user.set_auth_token()

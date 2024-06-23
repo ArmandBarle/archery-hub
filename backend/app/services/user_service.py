@@ -5,13 +5,6 @@ from app import db
 
 class UserService:
     @staticmethod
-    def authenticate_user(email, password):
-        user = User.query.filter_by(email=email).first()
-        if user and user.check_password(password):
-            return user
-        return None
-
-    @staticmethod
     def get_user_by_email(email):
         return User.query.filter_by(email=email).first()
 

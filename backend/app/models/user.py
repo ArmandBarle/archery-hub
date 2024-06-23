@@ -35,7 +35,7 @@ class User(db.Model):
     def set_auth_token(self):
         try:
             payload = {
-                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=0, seconds=50),
+                'exp': datetime.datetime.utcnow() + datetime.timedelta(days=7, hours=6, minutes=9),
                 'iat': datetime.datetime.utcnow(),
                 'sub': self.user_id
             }
