@@ -8,6 +8,7 @@ class EquipmentSetService:
             bow_id=data['bow_id'],
             arrow_id=data['arrow_id'],
             user_id=data['user_id'],
+            equipment_set_name=data['equipment_set_name']
         )
         db.session.add(new_equipment_set)
         db.session.commit()

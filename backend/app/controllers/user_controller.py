@@ -24,7 +24,7 @@ class UserController:
     def delete_user(user_id):
         success = UserService.delete_user(user_id)
         if success:
-            return jsonify({'message': 'User deleted successfully'}), 200
+            return jsonify({'message': 'User deleted successfully'}), 204
         return jsonify({'message': 'User not found'}), 404
 
     @staticmethod

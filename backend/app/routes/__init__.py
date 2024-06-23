@@ -1,5 +1,6 @@
 from flask import Flask
 from .authentication import auth_bp
+from .equipment_route import equipment_bp
 from .register import register_bp
 from .login import login_bp
 from .arrows import arrows_bp
@@ -20,3 +21,4 @@ def init_routes(app: Flask):
     app.register_blueprint(events_bp, url_prefix='/events')
     app.register_blueprint(users_bp, url_prefix='/users')
     app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(equipment_bp, url_prefix='/equipment')
