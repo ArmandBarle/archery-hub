@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:frontend/data/repositories/secure_storage.dart';
+import 'package:frontend/presentation/screens/chat_screen.dart';
 import 'package:frontend/presentation/screens/home/home_screen.dart';
+import 'package:frontend/presentation/screens/users/user_detail_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,6 +15,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   final storage = SecureStorage();
+
   Future<void> _logout() async {
     await storage.delete('auth_token');
     Navigator.pushReplacement(
@@ -20,13 +24,11 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  static List<Widget> _widgetOptions = <Widget>[
-    HomeFeedScreen(),
-    Text('Screen 1'),
-    Text('Screen 2'),
-    Text('Screen 3'),
-    Text('Screen 4'),
-  ];
+  Future<int?> _getUserId() async {
+    var payload = await FlutterSessionJwt.getPayload();
+      final userId = payload['sub'];
+      return userId;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -43,9 +45,33 @@ class _MainScreenState extends State<MainScreen> {
           IconButton(
             icon: Icon(Icons.logout),
             onPressed: _logout,
-          ),],
+          ),
+        ],
       ),
-      body: _widgetOptions.elementAt(_selectedIndex),
+      body: FutureBuilder<int?>(
+        future: _getUserId(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error fetching user ID,$snapshot.error'));
+          } else if (!snapshot.hasData) {
+            return Center(child: Text('No user ID found'));
+          }
+
+          int userId = snapshot.data! as int;
+
+          List<Widget> _widgetOptions = <Widget>[
+            HomeFeedScreen(),
+            UserDetailScreen(user_id: userId),
+            ChatScreen(),
+            Text('Screen 3'),
+            Text('Screen 4'),
+          ];
+
+          return _widgetOptions.elementAt(_selectedIndex);
+        },
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -70,6 +96,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
+        unselectedItemColor: Color.fromARGB(255, 42, 35, 143),
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
