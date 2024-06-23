@@ -1,4 +1,3 @@
-
 class Arrow {
   final int arrowId;
   final int userId;
@@ -26,16 +25,16 @@ class Arrow {
 
   factory Arrow.fromJson(Map<String, dynamic> json) {
     return Arrow(
-      arrowId: json['arrow_id'],
-      userId: json['user_id'],
-      arrowMaterial: json['arrow_material'],
-      arrowLength: json['arrow_length'].toDouble(),
-      arrowSpine: json['arrow_spine'],
-      arrowDiameter: json['arrow_diameter'].toDouble(),
-      arrowTip: json['arrow_tip'],
-      knockColour: json['knock_colour'],
-      fletchingType: json['fletching_type'],
-      fletchingColour: json['fletching_colour'],
+      arrowId: int.tryParse(json['arrow_id']?.toString() ?? '') ?? 0,
+      userId: int.tryParse(json['user_id']?.toString() ?? '') ?? 0,
+      arrowMaterial: json['arrow_material'] ?? '',
+      arrowLength: double.tryParse(json['arrow_length']?.toString() ?? '') ?? 0.0,
+      arrowSpine: int.tryParse(json['arrow_spine']?.toString() ?? '') ?? 0,
+      arrowDiameter: double.tryParse(json['arrow_diameter']?.toString() ?? '') ?? 0.0,
+      arrowTip: json['arrow_tip'] ?? '',
+      knockColour: json['knock_colour'] ?? '',
+      fletchingType: json['fletching_type'] ?? '',
+      fletchingColour: json['fletching_colour'] ?? '',
     );
   }
 

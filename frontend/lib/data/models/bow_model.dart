@@ -1,4 +1,3 @@
-
 class Bow {
   final int bowId;
   final int userId;
@@ -26,13 +25,13 @@ class Bow {
     return Bow(
       bowId: json['bow_id'],
       userId: json['user_id'],
-      bowStrength: json['bow_strength'].toDouble(),
-      bowLength: json['bow_length'].toDouble(),
-      stringLength: json['string_length'].toDouble(),
+      bowStrength: double.tryParse(json['bow_strength'].toString()) ?? 0.0,
+      bowLength: double.tryParse(json['bow_length'].toString()) ?? 0.0,
+      stringLength: double.tryParse(json['string_length'].toString()) ?? 0.0,
       bowMaterial: json['bow_material'],
       bowType: json['bow_type'],
-      bowDrawLength: json['bow_draw_length'].toDouble(),
-      braceHeight: json['brace_height'].toDouble(),
+      bowDrawLength: double.tryParse(json['bow_draw_length'].toString()) ?? 0.0,
+      braceHeight: double.tryParse(json['brace_height'].toString()) ?? 0.0,
     );
   }
 

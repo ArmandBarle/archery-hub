@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/services/auth_service.dart';
+import 'package:frontend/core/services/equipment_set_service.dart';
 import 'package:frontend/core/services/user_service.dart';
+import 'package:frontend/data/models/equipment_set_model.dart';
 import 'package:frontend/data/models/user_info_model.dart';
+import 'package:frontend/presentation/screens/equipment/add_equipment_set_screen.dart';
 
 class UserDetailScreen extends StatefulWidget {
   final int user_id;
@@ -12,11 +15,27 @@ class UserDetailScreen extends StatefulWidget {
 
 class _UserDetailScreenState extends State<UserDetailScreen> {
   late Future<UserDetail> _futureUser;
+  late Future<List<EquipmentSet>> _futureEquipment;
 
   @override
   void initState() {
     super.initState();
     _futureUser = UserService().getUserbyId(widget.user_id);
+    _futureEquipment = EquipmentService().getUserEquipment(widget.user_id);
+  }
+
+  void _navigateToAddEquipment() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddEquipmentScreen(userId: widget.user_id)),
+    );
+
+    if (result == true) {
+      // Refresh equipment list
+      setState(() {
+        _futureEquipment = EquipmentService().getUserEquipment(widget.user_id);
+      });
+    }
   }
 
   @override
@@ -47,93 +66,90 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                             color: Colors.grey[200],
                             borderRadius: BorderRadius.circular(8.0),
                           ),
-                          child: Column(
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Profile Picture
-                              Center(
-                                child: CircleAvatar(
-                                  radius: 50.0,
-                                  backgroundColor: Colors.grey[300],
-                                  child: Icon(Icons.person, size: 40.0),
-                                ),
+                              // Profile Picture and Name
+                              Column(
+                                children: [
+                                  CircleAvatar(
+                                    radius: 50.0,
+                                    backgroundColor: Colors.grey[300],
+                                    child: Icon(Icons.person, size: 40.0),
+                                  ),
+                                  SizedBox(height: 8.0),
+                                  Text(
+                                    '${userDetail.firstName} ${userDetail.lastName}',
+                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 16.0),
+                              SizedBox(width: 16.0),
                               // User Information
-                              Text(
-                                'Name',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // Email
+                                    Text(
+                                      'Email',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${userDetail.email}',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                    SizedBox(height: 8.0),
+                                    // Telephone
+                                    Text(
+                                      'Telephone',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0
+                                        ),
+                                      ),                                    
+                                    Text(
+                                      '${userDetail.phoneNumber}',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                    SizedBox(height: 8.0),
+                                    // Role
+                                    Text(
+                                      'Role',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${userDetail.roleId}',
+                                      style: TextStyle(fontSize: 16.0),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Text(
-                                '${userDetail.firstName} ${userDetail.lastName}',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                              SizedBox(height: 8.0),
-                              Text(
-                                'Email',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              Text(
-                                '${userDetail.email}',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                              SizedBox(height: 8.0),
-                              Text(
-                                'Telephone',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              Text(
-                                '${userDetail.phoneNumber}',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                              SizedBox(height: 8.0),
-                              Text(
-                                'Role',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                              Text(
-                                '${userDetail.roleId}',
-                                style: TextStyle(fontSize: 16.0),
-                              ),
-                              // SizedBox(height: 8.0),
-                              // Text(
-                              //   'Joined since',
-                              //   style: TextStyle(
-                              //     fontWeight: FontWeight.bold,
-                              //     fontSize: 16.0,
-                              //   ),
-                              // ),
-                              // Text(
-                              //   '${userDetail.joinedAt}', // Assuming joinedAt is available
-                              //   style: TextStyle(fontSize: 16.0),
-                              // ),
-                              SizedBox(height: 16.0),
                               // Edit Button
-                              ElevatedButton(
-                                onPressed: () {
-                                  // Implement edit user details functionality
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  padding: EdgeInsets.symmetric(horizontal: 32.0),
-                                ),
-                                child: Text(
-                                  'Edit',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
+                              // Column(
+                              //   crossAxisAlignment: CrossAxisAlignment.end,
+                              //   children: [
+                              //     ElevatedButton(
+                              //       onPressed: () {
+                              //         // Implement edit user details functionality
+                              //       },
+                              //       style: ElevatedButton.styleFrom(
+                              //         backgroundColor: Colors.blue,
+                              //         padding: EdgeInsets.symmetric(horizontal: 32.0),
+                              //       ),
+                              //       child: Text(
+                              //         'Edit',
+                              //         style: TextStyle(color: Colors.white),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                             ],
                           ),
                         ),
@@ -155,16 +171,33 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                   fontSize: 16.0,
                                 ),
                               ),
-                              // Add list of equipment here
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: 3, // Replace with actual equipment count
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    title: Text('Equipment Item ${index + 1}'),
-                                  );
+                              FutureBuilder<List<EquipmentSet>>(
+                                future: _futureEquipment,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    final equipmentList = snapshot.data!;
+                                    return ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: equipmentList.length,
+                                      itemBuilder: (context, index) {
+                                        final equipment = equipmentList[index];
+                                        return ListTile(
+                                          title: Text(equipment.equipmentSetName),
+                                        );
+                                      },
+                                    );
+                                  }
                                 },
+                              ),
+                              SizedBox(height: 10.0),
+                              ElevatedButton(
+                                onPressed: _navigateToAddEquipment,
+                                child: Text('Add Equipment'),
                               ),
                             ],
                           ),

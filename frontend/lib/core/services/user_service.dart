@@ -34,4 +34,26 @@ class UserService {
       throw Exception('Failed to get user');
     }
   }
+
+  Future<UserDetail> updateUser(UserDetail userDetail) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/users/${userDetail.userId}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'firstName': userDetail.firstName,
+        'lastName': userDetail.lastName,
+        'email': userDetail.email,
+        'phoneNumber': userDetail.phoneNumber,
+        'roleId': userDetail.roleId.toString(),
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return UserDetail.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to update user');
+    }
+  }
 }
