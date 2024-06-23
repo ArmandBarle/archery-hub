@@ -3,7 +3,7 @@ import 'package:frontend/core/constants/constants.dart';
 import 'package:frontend/data/models/arrow_model.dart';
 import 'package:frontend/data/models/bow_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:frontend/data/models/equipment_set_model.dart';  // Update this import
+import 'package:frontend/data/models/equipment_set_model.dart'; 
 import 'package:frontend/data/repositories/secure_storage.dart';
 
 class EquipmentService {
@@ -72,7 +72,7 @@ class EquipmentService {
     }
   }
 
-  addBow(Bow newBow) async {
+  Future<bool> addBow(Bow newBow) async {
     final response = await http.post(
       Uri.parse('$baseUrl/bows'),
       headers: {
@@ -80,12 +80,14 @@ class EquipmentService {
       },
       body: json.encode(newBow.toJson()),
     );
-    if (response.statusCode != 201) {
+    if (response.statusCode == 201) {
+      return true;
+    } else {
       throw Exception('Failed to add bow: ${response.statusCode}');
     }
   }
 
-  addArrow(Arrow newArrow) async {
+  Future<bool> addArrow(Arrow newArrow) async {
     final response = await http.post(
       Uri.parse('$baseUrl/arrows'),
       headers: {
@@ -93,7 +95,9 @@ class EquipmentService {
       },
       body: json.encode(newArrow.toJson()),
     );
-    if (response.statusCode != 201) {
+    if (response.statusCode == 201) {
+      return true;
+    } else {
       throw Exception('Failed to add arrow: ${response.statusCode}');
     }
   }

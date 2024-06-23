@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/presentation/screens/calendar/calendar_screen.dart';
-import 'package:frontend/presentation/screens/chat_screen.dart';
+import 'package:frontend/presentation/screens/chat/chat_screen.dart';
 import 'package:frontend/presentation/screens/home/main_screen.dart';
 import 'package:frontend/presentation/screens/home/home_screen.dart';
 import 'package:frontend/presentation/screens/login/login_screen.dart';
 import 'package:frontend/presentation/screens/register/register_screen.dart';
+import 'package:frontend/presentation/screens/results/results_screen.dart';
 import 'package:frontend/presentation/screens/splash/splash_screen.dart';
 import 'package:frontend/presentation/screens/users/coach_screen.dart';
 
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/chat': (context) => ChatScreen(),
         '/calendar': (context) => CalendarScreen(),
         '/coach': (context) => CoachScreen(),
+        '/results': (context) => ResultsScreen(),
       },
     );
   }

@@ -1,15 +1,6 @@
-import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:frontend/core/services/auth_service.dart';
-import 'package:frontend/data/models/user_info_model.dart';
-import 'package:frontend/data/repositories/secure_storage.dart';
 import 'package:frontend/presentation/screens/home/main_screen.dart';
-import 'package:frontend/presentation/screens/home/home_screen.dart';
-import 'package:frontend/presentation/screens/users/user_detail_screen.dart';
-import 'package:frontend/core/constants/constants.dart';
-import 'package:logger/logger.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -28,11 +19,6 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       var response = await _authService.login(email, password);
       if (response.statusCode == 200){
-
-        // Get the payload
-      var payload = await FlutterSessionJwt.getPayload();
-      // Extract the userId and send it to the UserDetailScreen
-      final userId = payload['sub'];
           Navigator.push(
             context,
             // MaterialPageRoute(builder: (context) => UserDetailScreen(user_id: userId)),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/presentation/screens/calendar/create_event_screen.dart';
+import 'package:frontend/presentation/screens/calendar/event_list_screen.dart';
 import 'package:frontend/presentation/screens/users/user_list_screen.dart';
 
 
@@ -26,8 +28,23 @@ class _CoachScreenState extends State<CoachScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CreateEventScreen()),
+                );
+              },
               child: const Text('Create Event'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EventsListScreen()),
+                );
+              },
+              child: const Text('Events List'),
             ),
             const SizedBox(height: 10),
             ElevatedButton(

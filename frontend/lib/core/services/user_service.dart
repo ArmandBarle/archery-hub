@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:frontend/data/repositories/secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:frontend/core/constants/constants.dart';
@@ -68,5 +69,11 @@ class UserService {
     if (response.statusCode != 204) {
       throw Exception('Failed to delete user');
     }
+  }
+
+  Future<int> getTokenId() async {
+    var payload = await FlutterSessionJwt.getPayload();
+    final userId = payload['sub'];
+    return userId;
   }
 }
