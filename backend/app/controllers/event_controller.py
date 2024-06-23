@@ -25,7 +25,14 @@ class EventController:
 
     @staticmethod
     def get_event_by_id(event_id):
-        return jsonify(EventService.get_event_by_id(event_id))
+        event = EventService.get_event_by_id(event_id)
+        event_data = event.to_dict()
+
+        for key, value in event_data.items():
+            if isinstance(value, (datetime, time)):
+                event_data[key] = serialize_datetime(value)
+
+        return jsonify(event_data), 200
 
     @staticmethod
     def create_event():
