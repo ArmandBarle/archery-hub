@@ -5,7 +5,7 @@ import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 import 'package:frontend/core/services/auth_service.dart';
 import 'package:frontend/data/models/user_info_model.dart';
 import 'package:frontend/data/repositories/secure_storage.dart';
-import 'package:frontend/presentation/screens/home/home_feed_screen.dart';
+import 'package:frontend/presentation/screens/home/main_screen.dart';
 import 'package:frontend/presentation/screens/home/home_screen.dart';
 import 'package:frontend/presentation/screens/users/user_detail_screen.dart';
 import 'package:frontend/core/constants/constants.dart';
