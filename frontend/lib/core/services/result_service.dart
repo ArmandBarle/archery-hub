@@ -40,5 +40,9 @@ class ResultService{
       },
       body: jsonEncode(newResult.toJson()),
     );
+
+    if (response.statusCode != 201) {
+      throw Exception('Failed to add result');
+    }
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/core/services/auth_service.dart';
 import 'package:frontend/core/services/equipment_set_service.dart';
+import 'package:frontend/core/services/result_service.dart';
 import 'package:frontend/core/services/user_service.dart';
+import 'package:frontend/core/services/event_service.dart';
 import 'package:frontend/data/models/equipment_set_model.dart';
+import 'package:frontend/data/models/results_model.dart';
 import 'package:frontend/data/models/user_info_model.dart';
+import 'package:frontend/data/models/event_model.dart';
 import 'package:frontend/presentation/screens/equipment/add_equipment_set_screen.dart';
 
 class UserDetailScreen extends StatefulWidget {
@@ -16,12 +19,14 @@ class UserDetailScreen extends StatefulWidget {
 class _UserDetailScreenState extends State<UserDetailScreen> {
   late Future<UserDetail> _futureUser;
   late Future<List<EquipmentSet>> _futureEquipment;
+  late Future<List<Result>> _futureResults;
 
   @override
   void initState() {
     super.initState();
     _futureUser = UserService().getUserbyId(widget.user_id);
     _futureEquipment = EquipmentService().getUserEquipment(widget.user_id);
+    _futureResults = ResultService().getResultsById(widget.user_id);
   }
 
   void _navigateToAddEquipment() async {
@@ -220,15 +225,46 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                                   fontSize: 16.0,
                                 ),
                               ),
-                              // Add list of statistics here
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: 4, // Replace with actual statistics count
-                                itemBuilder: (context, index) {
-                                  return ListTile(
-                                    title: Text('Statistic ${index + 1}'),
-                                  );
+                              FutureBuilder<List<Result>>(
+                                future: _futureResults,
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else {
+                                    final results = snapshot.data!;
+                                    if (results.isEmpty) {
+                                      return Text('No results available.');
+                                    } else {
+                                      final highestResult = results.reduce((a, b) => (a.resultTotal ?? 0) > (b.resultTotal ?? 0) ? a : b);
+                                      final highestScore = highestResult.resultTotal ?? 0;
+                                      return FutureBuilder<Event>(
+                                        future: EventService().getEventById(highestResult.eventId!),
+                                        builder: (context, eventSnapshot) {
+                                          if (eventSnapshot.connectionState == ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (eventSnapshot.hasError) {
+                                            return Text('Error: ${eventSnapshot.error}');
+                                          } else {
+                                            final event = eventSnapshot.data!;
+                                            return Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                ListTile(
+                                                  title: Text('Highest Score: $highestScore'),
+                                                ),
+                                                ListTile(
+                                                  title: Text('Event: ${event.eventName}'),
+                                                  subtitle: Text('Location: ${event.eventLocation}'),
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
+                                  }
                                 },
                               ),
                             ],
