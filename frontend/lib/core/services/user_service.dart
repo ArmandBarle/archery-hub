@@ -21,7 +21,7 @@ class UserService {
 
   Future<UserDetail> getUserbyId(int user_id) async {
     final url = Uri.parse('$baseUrl/users/$user_id');
-    final token = await SecureStorage().read("jwt");
+    final token = await SecureStorage().read("auth_token");
     final response = await http.get(
       url,
       headers: {'Authorization': 'Bearer $token'}, 

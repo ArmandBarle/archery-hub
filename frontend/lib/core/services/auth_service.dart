@@ -25,7 +25,7 @@ class AuthService {
 
   Future<bool> validateToken(String token) async {
     final response = await http.get(
-      Uri.parse('$baseUrl/validate_token'),
+      Uri.parse('$baseUrl/auth/validate_token'),
       headers: {
         'Authorization': 'Bearer $token',
       },

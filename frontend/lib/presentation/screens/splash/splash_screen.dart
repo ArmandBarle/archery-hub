@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:frontend/core/services/auth_service.dart';
-import 'package:frontend/data/repositories/secure_storage.dart';
 import 'package:frontend/presentation/screens/home/home_feed_screen.dart';
 import 'package:frontend/presentation/screens/home/home_screen.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,13 +11,25 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin{
   final AuthService _authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _checkToken();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    Future.delayed(Duration(seconds: 4), () {
+      // need to run the check token function however async fucntions cant be run in initstate so need to find a fix for that
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays:SystemUiOverlay.values);
   }
 
   Future<void> _checkToken() async {
@@ -35,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
         return;
       }
     }
-
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => HomeScreen()),
