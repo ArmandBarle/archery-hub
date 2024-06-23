@@ -21,7 +21,7 @@ def delete_user(user_id):
     return UserController.delete_user(user_id)
 
 
-@users_bp.route('<user_id>', methods=['UPDATE'])
+@users_bp.route('<user_id>', methods=['PUT'])
 def update_user(user_id):
     return UserController.update_user(user_id)
 
