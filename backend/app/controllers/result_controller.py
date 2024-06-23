@@ -30,3 +30,8 @@ class ResultsController:
         data = request.get_json()
         result = ResultService.update_result(result_id, data)
         return jsonify(result.to_dict())
+
+    @staticmethod
+    def get_results_by_user_id(user_id):
+        results = ResultService.get_results_by_user_id(user_id)
+        return jsonify([result.to_dict() for result in results])

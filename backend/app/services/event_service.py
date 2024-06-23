@@ -24,7 +24,7 @@ class EventService:
             event_created_by=data.get('event_created_by'),
             event_created_at=data.get('event_created_at'),
         )
-
+        print(new_event)
         db.session.add(new_event)
         db.session.commit()
 

@@ -24,3 +24,6 @@ def get_results_by_event(event_id):
 def update_result(result_id):
     return ResultsController.update_result(result_id)
 
+@results_bp.route('/user/<user_id>', methods=['GET'])
+def get_results_by_user(user_id):
+    return ResultsController.get_results_by_user_id(user_id)

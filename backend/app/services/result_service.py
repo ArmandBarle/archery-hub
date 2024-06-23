@@ -42,3 +42,7 @@ class ResultService:
             db.session.commit()
             return result
         return None
+
+    @staticmethod
+    def get_results_by_user_id(user_id):
+        return Result.query.filter_by(user_id=user_id).all()
