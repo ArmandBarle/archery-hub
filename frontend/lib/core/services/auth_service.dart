@@ -1,5 +1,4 @@
 import 'package:frontend/data/models/user_registration_model.dart';
-import 'package:frontend/data/models/user_info_model.dart';
 import 'package:frontend/data/repositories/secure_storage.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -9,6 +8,36 @@ import 'package:flutter_session_jwt/flutter_session_jwt.dart';
 
 class AuthService {
   static const String baseUrl = AppConstants.baseUrl;
+  final storage = SecureStorage();
+
+  Future<String?> getToken() async {
+    return await storage.read('auth_token');
+  }
+
+  Future<void> saveToken(String token) async {
+    await storage.write('auth_token',token);
+  }
+
+  Future<void> deleteToken() async {
+    await storage.delete('auth_token');
+  }
+
+
+  Future<bool> validateToken(String token) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/validate_token'),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final body = json.decode(response.body);
+      return body['valid'] == true;
+    } else {
+      return false;
+    }
+  }
 
   Future<http.Response> login(String email, String password) async {
     final url = Uri.parse('$baseUrl/login');
@@ -25,7 +54,7 @@ class AuthService {
       
       // saving token to secure storage
       await FlutterSessionJwt.saveToken(token);
-      await SecureStorage().write('jwt', token);
+      await storage.write('auth_token', token);
 
       return response;
     } else {

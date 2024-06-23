@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         // Get the payload
       var payload = await FlutterSessionJwt.getPayload();
-      // Extract the userId
+      // Extract the userId and send it to the UserDetailScreen
       final userId = payload['sub'];
           Navigator.push(
             context,
