@@ -29,20 +29,26 @@ class _UserListScreenState extends State<UsersListScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
-          } 
-          else if (snapshot.hasError) {
+          } else if (snapshot.hasError) {
             print('Error: ${snapshot.error}');
-          return const Center(child: Text('Failed to load users'));
-          } 
-          else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Failed to load users'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(child: Text('No users found'));
-          } 
-          else {
+          } else {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 final user = snapshot.data![index];
                 return ListTile(
+                  leading: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () async {
+                      await UserService().deleteUser(user.userId);
+                      setState(() {
+                        _futureUsers = UserService().getAllUsers();
+                      });
+                    },
+                  ),
                   title: Text('${user.firstName} ${user.lastName}'),
                   subtitle: Text(user.email),
                 );

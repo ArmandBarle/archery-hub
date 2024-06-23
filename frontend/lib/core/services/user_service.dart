@@ -56,4 +56,17 @@ class UserService {
       throw Exception('Failed to update user');
     }
   }
+
+  deleteUser(int userId) async {
+    final url = Uri.parse('$baseUrl/users/$userId');
+    final token = SecureStorage().read("auth_token");
+    final response = await http.delete(
+      url,
+      headers: {'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete user');
+    }
+  }
 }

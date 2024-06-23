@@ -4,6 +4,7 @@ import 'package:frontend/data/repositories/secure_storage.dart';
 import 'package:frontend/presentation/screens/calendar/calendar_screen.dart';
 import 'package:frontend/presentation/screens/chat_screen.dart';
 import 'package:frontend/presentation/screens/home/home_screen.dart';
+import 'package:frontend/presentation/screens/users/coach_screen.dart';
 import 'package:frontend/presentation/screens/users/user_detail_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -68,6 +69,7 @@ class _MainScreenState extends State<MainScreen> {
             ChatScreen(),
             Text('Screen 3'),
             CalendarScreen(),
+            CoachScreen(),
           ];
 
           return _widgetOptions.elementAt(_selectedIndex);
@@ -94,6 +96,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.event),
             label: 'Calendar',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.sports_soccer),
+            label: 'Coaches',
           ),
         ],
         currentIndex: _selectedIndex,

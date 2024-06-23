@@ -6,6 +6,7 @@ import 'package:frontend/presentation/screens/home/home_screen.dart';
 import 'package:frontend/presentation/screens/login/login_screen.dart';
 import 'package:frontend/presentation/screens/register/register_screen.dart';
 import 'package:frontend/presentation/screens/splash/splash_screen.dart';
+import 'package:frontend/presentation/screens/users/coach_screen.dart';
 
 
 void main() {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/register': (context) => RegisterScreen(),
         '/chat': (context) => ChatScreen(),
         '/calendar': (context) => CalendarScreen(),
+        '/coach': (context) => CoachScreen(),
       },
     );
   }
