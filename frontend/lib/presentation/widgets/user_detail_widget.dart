@@ -13,12 +13,10 @@ class UserDetailWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ListTile(
         leading: CircleAvatar(
-          // You can customize the avatar based on user data, e.g., profile picture
           child: Text(user.firstName[0] + user.lastName[0]),
         ),
         title: Text('${user.firstName} ${user.lastName}'),
         subtitle: Text(user.email),
-        // You can add more widgets to display additional user information
       ),
     );
   }

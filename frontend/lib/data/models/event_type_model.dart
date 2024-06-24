@@ -1,3 +1,4 @@
+
 class EventType {
   final int eventTypeId;
   final String eventTypeName;
